@@ -15,6 +15,7 @@ class Game:
             self._players.append(ComputerPlayer(name))
 
         # Hidden cards
+        #TODO: nicer!?!
         card_list = ClueCards().cue_card_list
         self._hidden_cards.append(random.choice(card_list))
 
