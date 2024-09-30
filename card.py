@@ -1,5 +1,4 @@
-# List of Clue/Cluedo cards categorized by type
-
+import random
 
 
 # Singleton
@@ -40,14 +39,31 @@ class ClueCards:
             cls._instance = super(ClueCards, cls).__new__(cls)
         return cls._instance
 
-    @property
-    def cue_card_list(self):
+    def clue_card_list(self, type: str = "any" ) -> list[str]:
         lst = []
-        for type_, cards in self._clue_cards.items():
-            for card in cards:
+        if type in self._clue_cards:
+            for card in self._clue_cards[type]:
                 lst.append(f"{type_} {card}")
+        else:
+            for type_, cards in self._clue_cards.items():
+                for card in cards:
+                    lst.append(f"{type_} {card}")
 
         return lst
+    
+    @property
+    def get_card_types(self) -> list[str]:
+        return list(self._clue_cards.keys())
+
+    # def get_random_card(self, type: str = "any", exclude: list[str] = [] ) -> str:
+    def get_random_card(self, type: str = "any") -> str:
+        if type in self._clue_cards:
+            return f"{type} {random.choice(self._clue_cards[type])}"
+        
+        return random.choice(self.cue_card_list())
+
+        
+    
 
 
 
