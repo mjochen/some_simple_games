@@ -3,6 +3,7 @@ import random
 
 # Singleton
 class Board:
+    _instance = None
     _steps_between_rooms = {
         ('Ballroom', 'Billiard Room'): 6,
         ('Ballroom', 'Conservatory'): 4,
@@ -56,10 +57,14 @@ class Board:
     def __init__(self) -> None:
         pass
 
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(Board, cls).__new__(cls)
+        return cls._instance
+
     def get_possible_rooms(self, current_room: str, nr_of_steps: int) -> list[str]:
-        lst = []
+        lst = [current_room]
         for key, value in self._steps_between_rooms.items():
-            print(key, value)
             if current_room in key and value <= nr_of_steps:
                 k = list(key)
                 k.remove(current_room)

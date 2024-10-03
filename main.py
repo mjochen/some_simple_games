@@ -7,8 +7,8 @@ print("Welcome to Cluedo in Python!")
 
 g = Game(["Jochen"], ["Lena", "Reggi", "Ronny"])
 
-print(g.get_next_up())
-print(g.get_next_up())
-print(g.get_next_up())
-print(g.get_next_up())
-print(g.get_next_up())
+try:
+    while data := g.play_turn():
+        print(data)
+except KeyboardInterrupt:
+    print("KeyboardInterrupt caught!")
