@@ -1,5 +1,5 @@
 from typing import Dict, List, Union
-from player import HumanPlayer, ComputerPlayer
+from player import *
 from card import ClueCards
 from board import Board
 import logging
@@ -7,16 +7,20 @@ import logging
 import random
 
 class Game:
-    _players = []
-    _hidden_cards = []
-    _next_up = 0
-
     def __init__(self, humanplayers: List[str], computerplayers: List[str]) -> None:
+        self._players = []
+        self._hidden_cards = []
+        self._next_up = 0
+
         self._players = []
         for name in humanplayers:
             self._players.append(HumanPlayer(name))
         for name in computerplayers:
-            self._players.append(ComputerPlayer(name))
+            if name[-1] == "1":
+                self._players.append(ComputerPlayer_1(name))
+            else:
+                self._players.append(ComputerPlayer(name))
+
         self._next_up = len(self._players) - 1
         # Hidden cards
         for t in ClueCards().get_card_types:
@@ -49,7 +53,7 @@ class Game:
         return (i+1) % len(self._players)
 
 
-    def play_turn(self) -> Union[dict, bool]:
+    def play_turn(self) -> dict:
         # next player
         i = self.get_next_up
         current_player = self._players[i]
@@ -83,10 +87,10 @@ class Game:
 
         if len(guess := current_player.guess()) == 3:
             if sorted(guess) == sorted(self._hidden_cards):
-                print(f"{current_player.name} Won!")
-                return False
+                logging.debug(f"{current_player.name} Won!")
+                return {"won":current_player.name}
             else:
-                print(f"{current_player.name} made a ba guess. Shame!")
+                logging.debug(f"{current_player.name} made a bad guess. Shame!")
 
 
 

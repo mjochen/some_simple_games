@@ -2,13 +2,14 @@ from board import Board
 from card import ClueCards
 from abc import ABC, abstractmethod
 import random
+import logging
 
 class Player(ABC):
-    _cards = []
-    _name = ""
-    _position = ""
-
     def __init__(self, name) -> None:
+        self._cards = []
+        self._name = ""
+        self._position = ""
+
         self._name = name
         self._cards = []
         self._position = Board().get_random_room()
@@ -51,11 +52,10 @@ class Player(ABC):
         pass
 
 class HumanPlayer(Player):
-    _seen_cards = []
-    _last_shown = []
-    _guess = []
-
     def __init__(self, name) -> None:
+        self._seen_cards = []
+        self._last_shown = []
+        self._guess = []
         super().__init__(name)
         print(f"Welcome human player called {name}!")
         print(f"Player is standing in the {self._position}.")
@@ -102,12 +102,11 @@ class HumanPlayer(Player):
         return guess
 
 class ComputerPlayer(Player):
-    _seen_cards = []
-
     def __init__(self, name) -> None:
+        self._seen_cards = []
         super().__init__(name)
-        print(f"Added computer player called {name}!")
-        print(f"Player is standing in the {self._position}.")
+        logging.debug(f"Added computer player called {name}!")
+        logging.debug(f"Player is standing in the {self._position}.")
 
     def move(self, dice_throw: int) -> str:
         move_options = Board().get_possible_rooms(self._position, dice_throw)
@@ -136,3 +135,17 @@ class ComputerPlayer(Player):
         if len(all_cards) == 3:
             return all_cards
         return []
+
+class ComputerPlayer_1(ComputerPlayer):
+    def __init__(self, name) -> None:
+        super().__init__(name)
+        logging.debug(f"Player is of level 1.")
+
+    def move(self, dice_throw: int) -> str:
+        move_options = Board().get_possible_rooms(self._position, dice_throw)
+        to_go = [ r for r in move_options if r not in self._seen_cards]
+        if len(to_go) > 0:
+            self._position = random.choice(to_go)
+        else:
+            self._position = random.choice(move_options)
+        return self._position
