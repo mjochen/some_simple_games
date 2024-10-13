@@ -52,14 +52,13 @@ class Game:
     def get_next_value(self, i: int):
         return (i+1) % len(self._players)
 
-
     def play_turn(self) -> dict:
         # next player
         i = self.get_next_up
         current_player = self._players[i]
 
         #move
-        dice_throw = random.randint(1,6) + random.randint(1,6)
+        dice_throw = (random.randint(1,6) + random.randint(1,6))*1
         ret = {
         "Playing": current_player.name,
         "Dice_throw": dice_throw,
@@ -84,14 +83,18 @@ class Game:
                 break
 
 
-
-        if len(guess := current_player.guess()) == 3:
-            if sorted(guess) == sorted(self._hidden_cards):
-                logging.debug(f"{current_player.name} Won!")
-                return {"won":current_player.name}
-            else:
-                logging.debug(f"{current_player.name} made a bad guess. Shame!")
-
+        guess = current_player.guess()
+        logging.debug(guess)
+        guess = [ card for card in guess if card in self._hidden_cards ]
+        if len(guess) == 3: #2cards!
+            logging.debug(f"{current_player.name} Won!")
+            ret["won"]  = current_player.name
+        elif len(guess) == 2:
+            logging.debug(f"{current_player.name} guessed {len(guess)} cards correctly!")
+            ret["guessed_correctly"] = len(guess)
+            # ret["won"]  = current_player.name
+        elif len(guess) == 1:
+            pass
 
 
         return ret

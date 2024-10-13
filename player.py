@@ -132,9 +132,11 @@ class ComputerPlayer(Player):
         all_cards = ClueCards().clue_card_list()
         all_cards = [ c for c in all_cards if c not in self._cards]
         all_cards = [ c for c in all_cards if c not in self._seen_cards]
-        if len(all_cards) == 3:
-            return all_cards
-        return []
+        counter = { "p": 0, "w": 0, "r": 0}
+        for card in all_cards:
+            counter[card[0]] += 1
+        all_cards = [ card for card in all_cards if counter[card[0]] == 1]
+        return all_cards
 
 class ComputerPlayer_1(ComputerPlayer):
     def __init__(self, name) -> None:
