@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Qwixx Dice Roller</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; margin-bottom: 1rem; }
+    .dice { display: flex; gap: 1rem; }
+    .die {
+      width: 50px; height: 50px; display: flex;
+      align-items: center; justify-content: center;
+      border: 2px solid #333; border-radius: 8px;
+      font-size: 1.5rem; font-weight: bold;
+    }
+    .white { background: #eee; }
+    .red   { background: #f88; }
+    .yellow{ background: #ff8; }
+    .green { background: #8f8; }
+    .blue  { background: #88f; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Qwixx Dice Roller</h1>
+  <button onclick="rollDice()">Roll!</button>
+  <div class="dice" id="diceContainer"></div>
+
+  <script>
+    async function rollDice() {
+      try {
+        const response = await fetch('http://localhost:8080/roll');  // if static HTML only, use http://localhost:8080/roll
+        const data = await response.json();
+        const dice = data.dice;
+
+        const container = document.getElementById('diceContainer');
+        container.innerHTML = '';
+
+        for (const [color, value] of Object.entries(dice)) {
+          const die = document.createElement('div');
+          die.className = `die ${color}`;
+          die.textContent = value;
+          container.appendChild(die);
+        }
+      } catch (err) {
+        alert('Error fetching dice roll: ' + err);
+      }
+    }
+  </script>
+</body>
+</html>
