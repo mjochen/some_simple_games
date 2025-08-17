@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Logeren in Bokrijk</title>
+  <meta name="description" content="Starterpagina voor logeeropties in en rond Bokrijk: filterbare kaart met suggesties, praktische info en call-to-actions." />
+  <style>
+    :root{
+      --bg:#f7f7f8;--fg:#1f2328;--muted:#5b616e;--brand:#005c5c;--brand-2:#00a6a6;--card:#ffffff;--stroke:#e5e7eb;
+      --radius:16px;--shadow:0 6px 20px rgba(0,0,0,.06)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Calibri,Arial,sans-serif;color:var(--fg);background:var(--bg)}
+    a{color:var(--brand)} a:hover{color:var(--brand-2)}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--stroke);z-index:10}
+    .wrap{max-width:1100px;margin:auto;padding: clamp(16px,2vw,24px)}
+    .topbar{display:flex;align-items:center;gap:16px;}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg)}
+    .logo svg{width:28px;height:28px}
+    .logo span{font-weight:700;letter-spacing:.3px}
+    .nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+
+    .hero{background:linear-gradient(180deg, rgba(0,166,166,.08), rgba(0,92,92,.04));border-bottom:1px solid var(--stroke)}
+    .hero h1{font-size: clamp(28px,4vw,44px);margin:0 0 8px}
+    .hero p{max-width:70ch;color:var(--muted);margin:0}
+
+    .filters{display:grid;grid-template-columns: 1fr; gap:10px; margin-top:18px}
+    .controls{display:grid;grid-template-columns: 1.2fr .8fr .8fr; gap:10px}
+    .chipbar{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{padding:8px 12px;border:1px solid var(--stroke);border-radius:999px;background:#fff;cursor:pointer;user-select:none}
+    .chip[data-active="true"]{background:var(--brand);color:#fff;border-color:transparent}
+
+    .input, select{width:100%;padding:12px 14px;border:1px solid var(--stroke);border-radius:12px;background:#fff}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--stroke);background:#fff;cursor:pointer}
+    .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
+
+    .grid{display:grid;grid-template-columns: repeat(12,1fr);gap:16px;margin-top:22px}
+    .card{grid-column: span 12;background:var(--card);border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+    .media{aspect-ratio: 16/9;background:#ddd;position:relative}
+    .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .content{padding:16px}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+    .tag{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef7f7;color:#0b3d3d}
+    .title{font-weight:700;font-size:18px;margin:0}
+    .desc{margin:8px 0 14px;color:var(--muted)}
+    .cta{display:flex;gap:10px;align-items:center;margin-top:auto;padding:0 16px 16px}
+
+    footer{margin-top:40px;border-top:1px solid var(--stroke);background:#fff}
+    footer .cols{display:grid;grid-template-columns: repeat(2,1fr); gap:16px}
+    footer small{color:var(--muted)}
+
+    @media (min-width:700px){
+      .filters{grid-template-columns: 1fr auto}
+      .controls{grid-template-columns: 1.2fr .7fr .7fr}
+      .card{grid-column: span 6}
+    }
+    @media (min-width:1000px){
+      .card{grid-column: span 4}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar" role="navigation" aria-label="Hoofdnavigatie">
+      <a class="logo" href="#" aria-label="Start">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M7 13l3 3 7-7" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Bokrijk</span>
+      </a>
+      <nav class="nav">
+        <a href="#">Bezoeken</a>
+        <a href="#" aria-current="page">Logeren</a>
+        <a href="#">Praktisch</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>Logeren in Bokrijk</h1>
+      <p>Logeren in de provincie Limburg met een randje avontuur eraan? Hier ben je op het juiste adres. In Bokrijk logeer je in een authentieke woning van een paar eeuwen geleden!</p>
+      <p>In Bokrijk logeer je voor de ervaring: Een week als schapenhoeder of stadssmid? Misschien ben je graag herenboer of knecht? Of wordt je het melkmeisje dat zich al eens graag verstopt
+        tussen stro, wachtend op een koene veldarbeider? In Bokrijk kan het allemaal!
+      </p>
+      <p>Je kiest voor een verblijf in Bokrijk dan ook niet voor een locatie maar een rol. Bekijk alle opties hieronder.</p>
+
+      <div class="filters" role="region" aria-label="Filters">
+        <div class="controls">
+          <label>
+            <span class="sr-only">Zoek</span>
+            <input id="search" class="input" type="search" placeholder="Zoek op naam, trefwoord… (bv. familie, vroeg_opstaan, bos)" aria-label="Zoek" />
+          </label>
+          <label>
+            <span class="sr-only">Type</span>
+            <select id="type">
+              <option value="">Alle types</option>
+              <option>Strozak</option>
+              <option>De grond</option>
+              <option>Hooizolder</option>
+              <option>Tussen de dieren</option>
+            </select>
+          </label>
+          <label>
+            <span class="sr-only">Sortering</span>
+            <select id="sort">
+              <option value="relevant">Meest relevant</option>
+              <option value="name">Naam A–Z</option>
+              <option value="type">Type A–Z</option>
+            </select>
+          </label>
+        </div>
+        <div class="chipbar" id="chips" role="group" aria-label="Snelle filters">
+          <button class="chip" data-tag="nieuw">Nieuw!</button>
+          <button class="chip" data-tag="vermoeiend">Vermoeiend</button>
+          <button class="chip" data-tag="vroeg_opstaan">Vroeg opstaan</button>
+          <button class="chip" data-tag="pijnlijke_kleren">Erg pijnlijke kleren</button>
+          <button class="chip" data-tag="weinig_eten">Weinig eten</button>
+          <button class="chip" data-tag="pijn_doen">Af en toe iemand pijn doen</button>
+          <button class="chip" data-tag="ontbering">Ontbering</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="grid" id="list" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="cols">
+        <p>Nog twijfels? Laat ze varen. Een zwembad of jacuzzi staat alleen maar in de weg van een echte vakantie-beleving.</p>
+        <p><strong>Vragen?</strong><br> Neem contact op via <a href="#">info@bokrijk.be</a> of bel <a href="#">+32 (0)11 00 00 00</a>.</p>
+        <p><strong>Praktisch</strong><br><small>Adres, bereikbaarheid, openingstijden en toegangsprijzen vind je op de praktische informatiepagina.</small></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Demo data – vervang door echte data of API
+    const data = [
+    { id:1, name:"Stapper", type:"De grond", tags:["nieuw", "vermoeiend","pijnlijke_kleren","vroeg_opstaan"], img:"https://cdn.pixabay.com/photo/2016/04/27/15/48/away-1356948_1280.jpg", desc:"Net thuis van een wandelvakantie waarin je amper bos zag? Haal hier je schade in!" },
+      { id:2, name:"Kanonafschieter", type:"Hooizolder", tags:["nieuw","weinig_eten","pijnlijke_kleren"], img:"https://figurines-et-collections.com/en/upload/230824_142705_PEEL_K34vKcHM.jpg", desc:"Soms last met je neefjes? Als kanonschutter knal je ze zo heel, heel ver weg!" },
+      { id:3, name:"Spelleider", type:"Strozak", tags:["nieuw","weinig_eten","ontbering","vermoeiend",], img:"https://d36a5wyl9ttzok.cloudfront.net/680x680/b2c/source_images/De-Weerwolven-van-Wakkerdam_L.png", desc:"Kan jij iedereen rond de tafel krijgen? Maak je de juiste mensen op het juiste moment wakker? Dan is dit jouw rol!" },
+        
+    { id:10, name:"Smid", type:"De grond", tags:["vermoeiend","pijnlijke_kleren","vroeg_opstaan"], img:"https://picsum.photos/seed/bok1/800/450", desc:"Opstaan bij het krieken van de dag en je de hele dag te pletter zweten. Inspanning was nog nooit zo ontspannend." },
+      { id:11, name:"Stroper", type:"Hooizolder", tags:["weinig_eten","pijnlijke_kleren"], img:"https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/fox-in-winter-landscape-celestial-images.jpg", desc:"Je verschuilt je in het bos, leeft en slaapt in de vrije pijnlijke_kleren en eet wat je vangt." },
+      { id:12, name:"Schaapshoeder", type:"Strozak", tags:["weinig_eten","ontbering","vermoeiend",], img:"https://images.stockcake.com/public/4/0/c/40ca245e-fe3a-4b30-b4bb-6acc0be69e45_large/idyllic-sheep-pasture-stockcake.jpg", desc:"Met je hond hoed je de schapen van het dorp. Je eet kaas en brood uit je eigen ransel!" },
+      { id:4, name:"Stalknecht", type:"Tussen de dieren", tags:["vroeg_opstaan","pijnlijke_kleren","vermoeiend"], img:"https://www.mediastorehouse.com/p/658/land-girl-working-farm-using-pitchfork-carry-hay-10981999.jpg.webp", desc:"Je reinigt de stal en je hoofd reinigt zichzelf. Het is pas echt vakantie met KAK aan je handen." },
+      { id:5, name:"Dorpspastoor", type:"De grond", tags:["pijn_doen","ontbering"], img:"https://research.lifeway.com/wp-content/uploads/2018/05/agriculture-architecture-building-449015.jpg", desc:"Je loopt plechtstatisch rond en veroordeelt je medebewoners." },
+      { id:6, name:"Meester", type:"Hooizolder", tags:["pijn_doen","vroeg_opstaan"], img:"https://c8.alamy.com/zooms/9/f3a2940c8cf84c91a7dca52e94905966/ddp6dy.jpg", desc:"In de lagere school leer je de kinderen de catechismus. En pijnlijke_klerenlijk spaar je de roede niet." },
+      { id:7, name:"Oudere van dage", type:"Strozak", tags:["weinig_eten","ontbering"], img:"https://as1.ftcdn.net/jpg/03/59/80/24/1000_F_359802425_1W96ExyitNSoQAGX20k2rlqhpTr1CXO4.jpg", desc:"Zoals het past in de tijd hou je jezelf stil op de achtergrond en schil je wat aardappelen." },
+      { id:8, name:"Beenhouwer", type:"De grond", tags:["pijnlijke_kleren","vroeg_opstaan"], img:"https://c8.alamy.com/comp/RJB0KG/the-butchers-boy-london-street-worker-illustration-1875-RJB0KG.jpg", desc:"Van een schattig varken naar een heerlijke maaltijd? Hier heb je het zelf in de hand!" },
+      { id:9, name:"Gendarm", type:"Tussen de dieren", tags:["pijn_doen","vermoeiend"], img:"https://c8.alamy.com/comp/D1DB8C/victorian-engraving-of-a-policeman-helping-a-lost-little-girl-1897-D1DB8C.jpg", desc:"Met je stevige knuppel loop je achter de stoute kinderen aan. Als je er eentje vangt mag je ze aframmelen!" }
+    ];
+
+    const listEl = document.querySelector('#list');
+    const searchEl = document.querySelector('#search');
+    const typeEl = document.querySelector('#type');
+    const sortEl = document.querySelector('#sort');
+    const chipEls = Array.from(document.querySelectorAll('.chip'));
+
+    const state = { q:'', type:'', tags:new Set(), sort:'relevant' };
+
+    function render(items){
+      listEl.innerHTML = '';
+      if(!items.length){
+        listEl.innerHTML = `<div class="card" role="status" aria-live="polite"><div class="content"><strong>Geen resultaten</strong><p class="desc">Pas je filters aan of wis je zoekopdracht.</p><button class="btn" id="reset">Reset filters</button></div></div>`;
+        document.querySelector('#reset')?.addEventListener('click', ()=>{ resetFilters(); update(); });
+        return;
+      }
+      for(const it of items){
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.setAttribute('data-type', it.type);
+        card.setAttribute('data-tags', it.tags.join(','));
+        card.innerHTML = `
+          <div class="media" aria-hidden="true"><img src="${it.img}" alt="" loading="lazy"></div>
+          <div class="content">
+            <h2 class="title">${it.name}</h2>
+            <div class="meta">
+              <span class="tag">${it.type}</span>
+              ${it.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+            </div>
+            <p class="desc">${it.desc}</p>
+          </div>
+          <div class="cta">
+            <button class="btn">Meer info</button>
+            <button class="btn primary">Boeken</button>
+          </div>
+        `;
+        listEl.appendChild(card);
+      }
+    }
+
+    function filterItems(){
+      const q = state.q.trim().toLowerCase();
+      return data.filter(it=>{
+        const matchesQ = !q || (it.name+it.desc+it.type+it.tags.join(' ')).toLowerCase().includes(q);
+        const matchesType = !state.type || it.type === state.type;
+        const matchesTags = !state.tags.size || Array.from(state.tags).every(tag=>it.tags.includes(tag));
+        return matchesQ && matchesType && matchesTags;
+      });
+    }
+
+    function sortItems(items){
+      const arr = [...items];
+      if(state.sort==='name') arr.sort((a,b)=>a.name.localeCompare(b.name,'nl')); 
+      if(state.sort==='type') arr.sort((a,b)=>a.type.localeCompare(b.type,'nl'));
+      return arr; // 'relevant' laat de oorspronkelijke volgorde
+    }
+
+    function update(){
+      const items = sortItems(filterItems());
+      render(items);
+    }
+
+    function resetFilters(){
+      state.q=''; state.type=''; state.tags.clear(); state.sort='relevant';
+      searchEl.value=''; typeEl.value=''; sortEl.value='relevant';
+      chipEls.forEach(c=>c.dataset.active=false);
+    }
+
+    // events
+    searchEl.addEventListener('input', (e)=>{ state.q = e.target.value; update(); });
+    typeEl.addEventListener('change', (e)=>{ state.type = e.target.value; update(); });
+    sortEl.addEventListener('change', (e)=>{ state.sort = e.target.value; update(); });
+    chipEls.forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        const tag = chip.dataset.tag;
+        const on = chip.dataset.active !== 'true';
+        chip.dataset.active = on;
+        if(on) state.tags.add(tag); else state.tags.delete(tag);
+        update();
+      });
+    });
+
+    // init
+    render(data);
+  </script>
+</body>
+</html>
