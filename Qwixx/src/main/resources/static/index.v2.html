@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Qwixx Web</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    h1 { margin-bottom: 0.5rem; }
+    button { margin: 0.5rem 0; padding: 0.5rem 1rem; }
+
+    .dice { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .die {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 6px; border: 2px solid #333;
+      font-weight: bold; font-size: 1.2rem;
+    }
+    .white { background: #eee; }
+    .red   { background: #f88; }
+    .yellow{ background: #ff8; }
+    .green { background: #8f8; }
+    .blue  { background: #88f; color: white; }
+
+    .row { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; }
+    .cell {
+      width: 35px; height: 35px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 4px; border: 1px solid #333;
+      cursor: pointer;
+    }
+    .cell.marked {
+      text-decoration: line-through;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>Qwixx</h1>
+  <button onclick="rollDice()">Roll Dice</button>
+  <div class="dice" id="diceContainer"></div>
+  <h3>Scorecard</h3>
+  <div id="scorecard"></div>
+  <p>Penalties: <span id="penalties">0</span></p>
+
+  <script>
+    const API = "http://localhost:8080/game"; // adjust if needed
+
+    async function fetchState() {
+      const res = await fetch(API + "/state");
+      const state = await res.json();
+      renderState(state);
+    }
+
+    async function rollDice() {
+      const res = await fetch(API + "/roll", { method: "POST" });
+      const state = await res.json();
+      renderState(state);
+    }
+
+    async function mark(color, number) {
+      const res = await fetch(`${API}/mark?color=${color}&number=${number}`, { method: "POST" });
+      const state = await res.json();
+      renderState(state);
+    }
+
+    function renderState(state) {
+      // Dice
+      const diceDiv = document.getElementById("diceContainer");
+      diceDiv.innerHTML = "";
+      if (state.currentRoll) {
+        for (const [color, val] of Object.entries(state.currentRoll.dice)) {
+          const d = document.createElement("div");
+          d.className = `die ${color}`;
+          d.textContent = val;
+          diceDiv.appendChild(d);
+        }
+      }
+
+      // Scorecard
+      const cardDiv = document.getElementById("scorecard");
+      cardDiv.innerHTML = "";
+      for (const [color, marks] of Object.entries(state.scoreCard.rows)) {
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "row";
+
+        marks.forEach((marked, idx) => {
+          let number;
+          if (color === "red" || color === "yellow") {
+            number = 2 + idx;
+          } else {
+            number = 12 - idx;
+          }
+
+          const cell = document.createElement("div");
+          cell.className = `cell ${color}`;
+          cell.textContent = number;
+
+          if (marked) {
+            cell.classList.add("marked");
+          } else {
+            cell.onclick = () => mark(color, number);
+          }
+
+          rowDiv.appendChild(cell);
+        });
+
+        cardDiv.appendChild(rowDiv);
+      }
+
+      // Penalties
+      document.getElementById("penalties").textContent = state.scoreCard.penalties;
+    }
+
+    // Initial load
+    fetchState();
+  </script>
+</body>
+</html>

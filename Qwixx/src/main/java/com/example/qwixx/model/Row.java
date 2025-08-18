@@ -1,17 +1,19 @@
 package com.example.qwixx.model;
 
 public class Row {
-    int[] digits = {2,3,4,5,6,7,8,9,10,11,12};
-    boolean[] digit_set ={ false, false, false, false, false, false, false, false, false, false, false };
-    String color;
+    private List<Integer> numbers;
+    private List<Boolean> ticked;
 
-    public Row(String color)
-    {
-        this.color = color;
+    // constructor
+    public Row(List<Integer> numbers, List<Boolean> ticked) {
+        this.numbers = numbers;
+        this.ticked = ticked;
     }
 
-    
+    // getters + setters
+    public List<Integer> getNumbers() { return numbers; }
+    public void setNumbers(List<Integer> numbers) { this.numbers = numbers; }
 
-
-    
+    public List<Boolean> getTicked() { return ticked; }
+    public void setTicked(List<Boolean> ticked) { this.ticked = ticked; }
 }

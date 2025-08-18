@@ -2,37 +2,31 @@
 package com.example.qwixx.controller;
 
 import com.example.qwixx.model.DiceRoll;
-import com.example.qwixx.model.GameState;
+import com.example.qwixx.model.ScoreCard;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/game")
 // @CrossOrigin(origins = "*") // allow frontend from elsewhere
 public class GameController {
 
-    private final Random random = new Random();
-    private GameState game = new GameState();
+    private DiceRoll dice = new DiceRoll();
 
-    @GetMapping("/state")
-    public GameState getState() {
-        return game;
+    @GetMapping("/scorecard")
+    public ScoreCard getScoreCard() {
+        ScoreCard card = new ScoreCard(false);
+        return card;
     }
 
-    @PostMapping("/roll")
-    public GameState rollDice() {
-        Map<String, Integer> dice = new LinkedHashMap<>();
-        dice.put("white1", random.nextInt(6) + 1);
-        dice.put("white2", random.nextInt(6) + 1);
-        dice.put("red",    random.nextInt(6) + 1);
-        dice.put("yellow", random.nextInt(6) + 1);
-        dice.put("green",  random.nextInt(6) + 1);
-        dice.put("blue",   random.nextInt(6) + 1);
+    @GetMapping("/roll")
+    public int[] rollDice() {
+        
+        return dice.newDiceRoll();
+    }
 
-        // game.setCurrentRoll(new DiceRoll(dice));
-        return game;
+    @GetMapping("/deactivate")
+    public int[] deactivate() {
+        dice.deactivate("blue");
+        return dice.newDiceRoll();
     }
 }
