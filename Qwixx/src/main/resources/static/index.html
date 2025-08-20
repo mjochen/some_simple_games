@@ -4,89 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Qwixx Web</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 1rem;
-        }
-
-        h1 {
-            margin-bottom: 0.5rem;
-        }
-
-        button {
-            margin: 0.5rem 0;
-            padding: 0.5rem 1rem;
-        }
-
-        .dice {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .die {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            border: 2px solid #333;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .white {
-            background: #eee;
-        }
-
-        .red {
-            background: #f88;
-        }
-
-        .yellow {
-            background: #ff8;
-        }
-
-        .green {
-            background: #8f8;
-        }
-
-        .blue {
-            background: #88f;
-            color: white;
-        }
-
-        .row {
-            display: flex;
-            gap: 0.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .cell {
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            border: 1px solid #333;
-            cursor: pointer;
-        }
-
-        .cell.marked {
-            text-decoration: line-through;
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel='stylesheet' href='/style.css'>
 </head>
 
 <body>
     <h1>Qwixx</h1>
     <button onclick="rollDice()">Roll Dice</button>
-    <button onclick="fetchState()">Fetch state</button>
+    <button onclick="fetchScoreCard()">Fetch scorecard</button>
     <div class="dice" id="diceContainer"></div>
     <h3>Scorecard</h3>
     <div id="scorecard"></div>
@@ -95,67 +19,51 @@
     <script>
         const API = "http://localhost:8080/game"; // adjust if needed
 
-        async function fetchState() {
+        async function fetchScoreCard() {
             const res = await fetch(API + "/scorecard");
             const scorecard = await res.json();
             console.log(scorecard);
             updateScoreCard(scorecard);
-            //   renderState(state);
         }
 
         function updateScoreCard(sc) {
-
-            //let scorecardDiv = document.querySelector(".scorecard");
             let scorecardDiv = document.getElementById("scorecard");
-            
 
-            // Loop over each row in the scorecard object
-            Object.entries(sc).forEach(([color, numbers]) => {
-                let rowDiv = document.createElement("div");
-                rowDiv.className = `row ${color}`; // e.g. "row red"
+            for (const [rowName, rowData] of Object.entries(sc)) {
+                if (rowName === "penalties") continue; // skip penalties
+                console.log(rowName);
 
-                numbers.forEach(num => {
-                    let cell = document.createElement("div");
-                    cell.className = "cell";
+                const rowDiv = document.createElement("div");
+                // rowDiv.className = `row ${rowName}`;
+                rowDiv.className = `row`;
+
+                rowData.numbers.forEach((num, idx) => {
+                    const cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.classList.add(rowName);
                     cell.textContent = num;
-                    cell.addEventListener("click", () => {
-                        cell.classList.toggle("crossed");
-                    });
+
+                    if (rowData.ticked[idx]) {
+                        cell.classList.add("crossed");
+                    }
+
+                    // cell.addEventListener("click", () => {
+                    //     cell.classList.toggle("crossed");
+                    //     rowData.ticked[idx] = cell.classList.contains("crossed");
+                    // });
+
                     rowDiv.appendChild(cell);
                 });
 
-                scorecardDiv.appendChild(rowDiv);
-            });
+                // add lock cell at the end
+                const lockCell = document.createElement("div");
+                lockCell.classList.add("cell", "lock");
+                lockCell.textContent = rowData.locked ? "🔒" : "🤙";
 
+                rowDiv.appendChild(lockCell);
 
-
-            // for (const [color, marks] of Object.entries(state.scoreCard.rows)) {
-            //     const rowDiv = document.createElement("div");
-            //     rowDiv.className = "row";
-
-            //     marks.forEach((marked, idx) => {
-            //         let number;
-            //         if (color === "red" || color === "yellow") {
-            //             number = 2 + idx;
-            //         } else {
-            //             number = 12 - idx;
-            //         }
-
-            //         const cell = document.createElement("div");
-            //         cell.className = `cell ${color}`;
-            //         cell.textContent = number;
-
-            //         if (marked) {
-            //             cell.classList.add("marked");
-            //         } else {
-            //             cell.onclick = () => mark(color, number);
-            //         }
-
-            //         rowDiv.appendChild(cell);
-            //     });
-
-            //     cardDiv.appendChild(rowDiv);
-            // }
+                document.body.appendChild(rowDiv);
+            }
 
             // Penalties
             document.getElementById("penalties").textContent = sc.penalties;
@@ -164,34 +72,39 @@
         }
 
         async function rollDice() {
-            const res = await fetch(API + "/roll", { method: "POST" });
-            const state = await res.json();
-            //renderState(state);
+            const res = await fetch(API + "/roll");
+            const dice = await res.json();
+            console.log(dice);
+            renderDice(dice);
         }
 
-        async function mark(color, number) {
-            const res = await fetch(`${API}/mark?color=${color}&number=${number}`, { method: "POST" });
-            const state = await res.json();
+        const diceOrder = ["white1", "white2", "yellow", "red", "green", "blue"];
 
-            //   renderState(state);
-        }
+        function renderDice(dice) {
 
-        function renderState(state) {
+            const container = document.getElementById("diceContainer");
+            container.innerHTML = ""; // clear old dice
 
-            // Dice
-            const diceDiv = document.getElementById("diceContainer");
-            diceDiv.innerHTML = "";
-            if (state.currentRoll) {
-                for (const [color, val] of Object.entries(state.currentRoll.dice)) {
-                    const d = document.createElement("div");
-                    d.className = `die ${color}`;
-                    d.textContent = val;
-                    diceDiv.appendChild(d);
+            diceOrder.forEach(color => {
+                const value = dice[color];
+                if (value !== undefined) {
+                    const die = document.createElement("div");
+                    die.classList.add("die", color);
+                    die.textContent = value;
+                    container.appendChild(die);
                 }
-            }
-
-
+            });
+            
         }
+
+        // async function mark(color, number) {
+        //     const res = await fetch(`${API}/mark?color=${color}&number=${number}`, { method: "POST" });
+        //     const state = await res.json();
+
+        //     //   renderState(state);
+        // }
+
+        
 
         // Initial load
         // fetchState();

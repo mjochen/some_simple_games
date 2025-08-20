@@ -1,19 +1,49 @@
 package com.example.qwixx.model;
 
+import java.util.Random;
+
 public class Row {
-    private List<Integer> numbers;
-    private List<Boolean> ticked;
+    private int[] numbers = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    private boolean[] ticked = { false, false, false, false, false, false, false, false, false, false, false };
+    private boolean locked;
+    private Random rnd = new Random();
 
     // constructor
-    public Row(List<Integer> numbers, List<Boolean> ticked) {
-        this.numbers = numbers;
-        this.ticked = ticked;
+    public Row(boolean complex) {
+        if (complex) {
+            this.shuffleArray(this.numbers);
+        }
+        this.locked = false;
     }
 
-    // getters + setters
-    public List<Integer> getNumbers() { return numbers; }
-    public void setNumbers(List<Integer> numbers) { this.numbers = numbers; }
+    public void crossNumber(int number)
+    {
+        for(int i=0; i< this.numbers.length; i++)
+        {
+            if(this.numbers[i] == number) this.ticked[i] = true;
+        }
+    }
 
-    public List<Boolean> getTicked() { return ticked; }
-    public void setTicked(List<Boolean> ticked) { this.ticked = ticked; }
+    public int[] getNumbers() {
+        return numbers;
+    }
+
+    public boolean[] getTicked() {
+        return ticked;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    // https://stackoverflow.com/questions/1519736/random-shuffling-of-an-array
+    private void shuffleArray(int[] ar) {
+        for (int i = ar.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            int a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
+    }
 }

@@ -11,22 +11,24 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     private DiceRoll dice = new DiceRoll();
+    private ScoreCard card = new ScoreCard(false);;
 
     @GetMapping("/scorecard")
     public ScoreCard getScoreCard() {
-        ScoreCard card = new ScoreCard(false);
-        return card;
+        this.card.crossField("yellow", 8);
+        this.card.crossField("red", 3);
+        return this.card;
     }
 
     @GetMapping("/roll")
-    public int[] rollDice() {
-        
-        return dice.newDiceRoll();
+    public DiceRoll rollDice() {
+        return dice;
     }
 
     @GetMapping("/deactivate")
-    public int[] deactivate() {
+    public DiceRoll deactivate() {
         dice.deactivate("blue");
-        return dice.newDiceRoll();
+        dice.roll();
+        return dice;
     }
 }

@@ -11,7 +11,7 @@ public class DiceRoll {
     {
     }
 
-    public int[] newDiceRoll()
+    public void roll()
     {
         this.currentRoll[0] = random.nextInt(6) + 1;
         this.currentRoll[1] = random.nextInt(6) + 1;
@@ -20,25 +20,33 @@ public class DiceRoll {
             if(this.activeDice[i]) this.currentRoll[i+2] = random.nextInt(6) + 1;
             else this.currentRoll[i+2] = 0;
         }
-
-        return this.currentRoll;
     }
 
-    public int[] getDiceRoll()
-    {
-        return this.currentRoll;
-    }
+    // public int[] getDiceRoll()
+    // {
+    //     return this.currentRoll;
+    // }
 
     public void deactivate(String color)
     {
-        if(color.equals("red")) this.activeDice[0] = false;
-        if(color.equals("yellow")) this.activeDice[1] = false;
-        if(color.equals("green")) this.activeDice[2] = false;
-        if(color.equals("blue")) this.activeDice[3] = false;
+        this.activeDice[Translator.nameToIndex(color)] = false;
     }
     
-    public boolean[] getActiveDice()
+    public boolean[] currentActiveDice()
     {
         return this.activeDice;
     }
+
+    public int getWhite1()
+    {return this.currentRoll[0];}
+    public int getWhite2()
+    {return this.currentRoll[1];}
+    public int getYellow()
+    {return this.currentRoll[2+Translator.nameToIndex("yellow")];}
+    public int getRed()
+    {return this.currentRoll[2+Translator.nameToIndex("red")];}
+    public int getGreen()
+    {return this.currentRoll[2+Translator.nameToIndex("green")];}
+    public int getBlue()
+    {return this.currentRoll[2+Translator.nameToIndex("blue")];}
 }

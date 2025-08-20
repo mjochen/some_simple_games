@@ -1,2 +1,3 @@
-* 'ticked' erbij inkrijgen -> rows
-* dobbelstenen
+v 'ticked' erbij inkrijgen -> rows
+v dobbelstenen
+* new game (button, post, blabla)
