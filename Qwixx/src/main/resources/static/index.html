@@ -9,106 +9,22 @@
 
 <body>
     <h1>Qwixx</h1>
-    <button onclick="rollDice()">Roll Dice</button>
-    <button onclick="fetchScoreCard()">Fetch scorecard</button>
-    <div class="dice" id="diceContainer"></div>
-    <h3>Scorecard</h3>
+    <button onclick="newGame()">New Game</button>
+    <input type="checkbox" id="complexGame">Getallen niet in volgorde</input>
+    <br/>
+    <h2>Scorecard</h2>
     <div id="scorecard"></div>
-    <p>Penalties: <span id="penalties">100</span></p>
+    <p>Penalties: <span id="penalties"></span></p>
+    <h2>Opties</h2>
+    <div class="dice" id="optionsContainer"></div>
+    <h2>Dobbelstenen</h2>
+    <button onclick="rollDice()">Roll Dice</button>
+    
+    <!-- <button onclick="fetchScoreCard()">Fetch scorecard</button> -->
+    <div class="dice" id="diceContainer"></div>
+    
 
-    <script>
-        const API = "http://localhost:8080/game"; // adjust if needed
-
-        async function fetchScoreCard() {
-            const res = await fetch(API + "/scorecard");
-            const scorecard = await res.json();
-            console.log(scorecard);
-            updateScoreCard(scorecard);
-        }
-
-        function updateScoreCard(sc) {
-            let scorecardDiv = document.getElementById("scorecard");
-
-            for (const [rowName, rowData] of Object.entries(sc)) {
-                if (rowName === "penalties") continue; // skip penalties
-                console.log(rowName);
-
-                const rowDiv = document.createElement("div");
-                // rowDiv.className = `row ${rowName}`;
-                rowDiv.className = `row`;
-
-                rowData.numbers.forEach((num, idx) => {
-                    const cell = document.createElement("div");
-                    cell.classList.add("cell");
-                    cell.classList.add(rowName);
-                    cell.textContent = num;
-
-                    if (rowData.ticked[idx]) {
-                        cell.classList.add("crossed");
-                    }
-
-                    // cell.addEventListener("click", () => {
-                    //     cell.classList.toggle("crossed");
-                    //     rowData.ticked[idx] = cell.classList.contains("crossed");
-                    // });
-
-                    rowDiv.appendChild(cell);
-                });
-
-                // add lock cell at the end
-                const lockCell = document.createElement("div");
-                lockCell.classList.add("cell", "lock");
-                lockCell.textContent = rowData.locked ? "🔒" : "🤙";
-
-                rowDiv.appendChild(lockCell);
-
-                document.body.appendChild(rowDiv);
-            }
-
-            // Penalties
-            document.getElementById("penalties").textContent = sc.penalties;
-
-
-        }
-
-        async function rollDice() {
-            const res = await fetch(API + "/roll");
-            const dice = await res.json();
-            console.log(dice);
-            renderDice(dice);
-        }
-
-        const diceOrder = ["white1", "white2", "yellow", "red", "green", "blue"];
-
-        function renderDice(dice) {
-
-            const container = document.getElementById("diceContainer");
-            container.innerHTML = ""; // clear old dice
-
-            diceOrder.forEach(color => {
-                const value = dice[color];
-                if (value !== undefined) {
-                    const die = document.createElement("div");
-                    die.classList.add("die", color);
-                    die.textContent = value;
-                    container.appendChild(die);
-                }
-            });
-            
-        }
-
-        // async function mark(color, number) {
-        //     const res = await fetch(`${API}/mark?color=${color}&number=${number}`, { method: "POST" });
-        //     const state = await res.json();
-
-        //     //   renderState(state);
-        // }
-
-        
-
-        // Initial load
-        // fetchState();
-    </script>
+    <script type="text/javascript" src="/index.js"></script>
 </body>
 
 </html>
