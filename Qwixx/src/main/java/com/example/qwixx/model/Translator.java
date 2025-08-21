@@ -26,4 +26,8 @@ public class Translator {
         return "no color";
     }
     
+    public static String[] allColors()
+    {
+        return new String[] {"yellow", "red", "green", "blue"};
+    }
 }

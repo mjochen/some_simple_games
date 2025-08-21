@@ -52,8 +52,7 @@ public class GameController {
     public ScoreCard setOption(@RequestParam String color, @RequestParam int number, @RequestParam boolean white, HttpSession session){
         ScoreCard sc = (ScoreCard) session.getAttribute("scorecard");
 
-        if(color.equals("")) this.numberOptionsSkipped ++;
-        else sc.crossField(color, number);
+        if(!sc.crossField(color, number)) this.numberOptionsSkipped ++;
 
         if(this.numberOptionsSkipped == 2) sc.addPenalty();
 
@@ -64,22 +63,6 @@ public class GameController {
         }
         return sc;
     }
-
-    // public ScoreCard getScorecard(HttpSession session) {
-    // ScoreCard sc = (ScoreCard) session.getAttribute("scorecard");
-    // if (sc == null) {
-    // sc = new ScoreCard(false);
-    // session.setAttribute("scorecard", sc);
-    // }
-    // return sc;
-    // }
-
-    // @GetMapping("/scorecard_temp")
-    // public ScoreCard getScoreCard_temp() {
-    // this.card.crossField("yellow", 8);
-    // this.card.crossField("red", 3);
-    // return this.card;
-    // }
 
     @GetMapping("/deactivate")
     public DiceRoll deactivate() {

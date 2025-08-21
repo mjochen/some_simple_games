@@ -37,6 +37,15 @@ public class DiceRoll {
         return this.activeDice;
     }
 
+    public int[] theColoredDiceGet()
+    {
+        int[] colored = new int[4];
+        for (int i = 0; i < 4; i++) {
+            colored[i] = this.currentRoll[2 + i];
+        }
+        return colored;
+    }
+
     public int getWhite1()
     {return this.currentRoll[0];}
     public int getWhite2()

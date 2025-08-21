@@ -19,6 +19,11 @@ async function fetchScoreCard() {
 }
 
 function updateScoreCard(sc) {
+    const c1 = document.getElementById("diceContainer");
+    c1.innerHTML = "";
+    const c2 = document.getElementById("optionsContainer");
+    c2.innerHTML = "";
+
     let scorecardDiv = document.getElementById("scorecard");
     scorecardDiv.innerHTML = "";
 
@@ -42,11 +47,6 @@ function updateScoreCard(sc) {
             if (rowData.ticked[idx]) {
                 cell.classList.add("crossed");
             }
-
-            // cell.addEventListener("click", () => {
-            //     cell.classList.toggle("crossed");
-            //     rowData.ticked[idx] = cell.classList.contains("crossed");
-            // });
 
             rowDiv.appendChild(cell);
         });
@@ -110,8 +110,8 @@ function renderDice(dice) {
 }
 
 function renderOptions(options, white) {
-    console.log("okidoki")
-    console.log(options)
+    // console.log("okidoki")
+    // console.log(options)
     const container = document.getElementById("optionsContainer");
     container.innerHTML = "";
 
@@ -125,15 +125,15 @@ function renderOptions(options, white) {
     container.appendChild(subtitle);
 
     const lockCell = document.createElement("div");
-    lockCell.classList.add("die");
+    lockCell.classList.add("die", "clickable");
     lockCell.textContent = "❌";
-    lockCell.addEventListener("click", () => handleOptionClick("", 0, white));
+    lockCell.addEventListener("click", () => handleOptionClick("no color", 0, white));
     container.appendChild(lockCell);
 
     options.forEach(opt => {
         const [color, value] = opt.split(" ");
         const die = document.createElement("div");
-        die.className = `die ${color}`;
+        die.className = `die ${color} clickable`;
         die.textContent = value;
 
         // click handling

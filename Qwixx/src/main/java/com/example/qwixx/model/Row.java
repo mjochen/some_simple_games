@@ -16,12 +16,47 @@ public class Row {
         this.locked = false;
     }
 
-    public void crossNumber(int number)
-    {
-        for(int i=0; i< this.numbers.length; i++)
-        {
-            if(this.numbers[i] == number) this.ticked[i] = true;
+    public boolean crossNumber(int number) {
+        if (this.testNumber(number)) {
+            for (int i = this.numbers.length - 1; i >= 0; i--) {
+                if (this.numbers[i] == number) {
+                    this.ticked[i] = true;
+                    return true;
+                }
+            }
         }
+        return false;
+    }
+
+    public boolean testNumber(int number) {
+        if (this.numbers[10] == number) {
+            int tickCount = 0;
+            for (int i = 0; i < this.ticked.length; i++) {
+                if (this.ticked[i])
+                    tickCount++;
+            }
+            if (tickCount > 5) {
+                // this.ticked[10] = true;
+                this.locked = true;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        for (int i = this.numbers.length - 1; i >= 0; i--) {
+            if (this.ticked[i]) {
+                return false;
+            }
+            if (this.numbers[i] == number) {
+                // this.ticked[i] = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int calculateScore() {
+        return 10;
     }
 
     public int[] getNumbers() {
