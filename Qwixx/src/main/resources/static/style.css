@@ -7,6 +7,18 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
+h3 {
+  display: block;
+  /* width: 100%; */
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between; /* pushes them to opposite sides */
+  align-items: center;            /* vertical centering */
+  padding: 0.5em;                 /* some breathing space */
+}
+
 button {
     margin: 0.5rem 0;
     padding: 0.5rem 1rem;

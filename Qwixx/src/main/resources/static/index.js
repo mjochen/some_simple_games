@@ -1,4 +1,5 @@
-const API = "http://localhost:8080/game"; // adjust if needed
+// const API = "http://localhost:8080/game"; // adjust if needed
+const API = "/game"; // adjust if needed
 const diceOrder = ["white1", "white2", "yellow", "red", "green", "blue"];
 const colorOrder = ["yellow", "red", "green", "blue"];
 
@@ -22,6 +23,8 @@ function updateScoreCard(sc) {
     console.log(sc)
     // const c1 = document.getElementById("diceContainer");
     // c1.innerHTML = "";
+    const c1 = document.getElementById("optionsTitle");
+    c1.innerHTML = "";
     const c2 = document.getElementById("optionsContainer");
     c2.innerHTML = "";
 
@@ -125,20 +128,20 @@ function renderOptions(options, white) {
     const container = document.getElementById("optionsContainer");
     container.innerHTML = "";
 
-    const subtitle = document.createElement("h3");
+    const title = document.getElementById("optionsTitle");
     if (white) {
-        subtitle.innerText = "Met de witte dobbelstenen:";
+        title.innerText = "Met de witte dobbelstenen:";
     }
     else {
-        subtitle.innerText = "Met de gekleurde dobbelstenen:";
+        title.innerText = "Met de gekleurde dobbelstenen:";
     }
-    container.appendChild(subtitle);
+    // container.appendChild(subtitle);
 
-    const lockCell = document.createElement("div");
-    lockCell.classList.add("die", "clickable");
-    lockCell.textContent = "❌";
-    lockCell.addEventListener("click", () => handleOptionClick("no color", 0, white));
-    container.appendChild(lockCell);
+    const noDie = document.createElement("div");
+    noDie.classList.add("die", "clickable");
+    noDie.textContent = "❌";
+    noDie.addEventListener("click", () => handleOptionClick("no color", 0, white));
+    container.appendChild(noDie);
 
     options.forEach(opt => {
         const [color, value] = opt.split(" ");

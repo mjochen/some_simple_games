@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Qwixx Web</title>
     <link rel='stylesheet' href='/style.css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -15,13 +16,16 @@
     <!-- <h2>Scorecard</h2> -->
     <div id="scorecard"></div>
 
-    <p>Strafschoppen: <span id="penalties"></span>
-    Goals: <span id="score"></span></p>
+    <div class="status-bar">
+        <h3>Gemiste worpen: <span id="penalties"></span></h3>
+        <h3>Score: <span id="score"></span></h3>
+    </div>
     <!-- <h2>Opties</h2> -->
+    <h3 id="optionsTitle"></h3> 
     <div class="dice" id="optionsContainer"></div>
     <!-- <h2>Dobbelstenen</h2> -->
     <!-- <button onclick="fetchScoreCard()">Fetch scorecard</button> -->
-    <p><button onclick="rollDice()">Rol die dobbelaars!</button>
+    <p><button onclick="rollDice()">Rollen!</button>
     <span class="dice" id="diceContainer"></span></p>
     
 
