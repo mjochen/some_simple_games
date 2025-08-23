@@ -20,12 +20,14 @@ public class Options {
             int[] colored = dice.theColoredDiceGet();
             int nr;
             for (int i = 0; i < colored.length; i++) {
-                nr = colored[i] + dice.getWhite1();
-                if (sc.testField(Translator.indexToName(i), nr))
-                    temp_opts.add(Translator.indexToName(i) + " " + nr);
-                nr = colored[i] + dice.getWhite2();
-                if (sc.testField(Translator.indexToName(i), nr))
-                    temp_opts.add(Translator.indexToName(i) + " " + nr);
+                if (colored[i] > 0) {
+                    nr = colored[i] + dice.getWhite1();
+                    if (sc.testField(Translator.indexToName(i), nr))
+                        temp_opts.add(Translator.indexToName(i) + " " + nr);
+                    nr = colored[i] + dice.getWhite2();
+                    if (sc.testField(Translator.indexToName(i), nr))
+                        temp_opts.add(Translator.indexToName(i) + " " + nr);
+                }
             }
         }
 

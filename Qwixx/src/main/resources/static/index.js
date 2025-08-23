@@ -4,7 +4,7 @@ const colorOrder = ["yellow", "red", "green", "blue"];
 
 async function newGame() {
     var comp = document.getElementById("complexGame");
-    console.log(comp.checked)
+    // console.log(comp.checked)
     const res = await fetch(`${API}/newGame?complex=${comp.checked}`, { method: "POST" });
     const scorecard = await res.json();
     updateScoreCard(scorecard);
@@ -19,8 +19,9 @@ async function fetchScoreCard() {
 }
 
 function updateScoreCard(sc) {
-    const c1 = document.getElementById("diceContainer");
-    c1.innerHTML = "";
+    console.log(sc)
+    // const c1 = document.getElementById("diceContainer");
+    // c1.innerHTML = "";
     const c2 = document.getElementById("optionsContainer");
     c2.innerHTML = "";
 
@@ -30,9 +31,9 @@ function updateScoreCard(sc) {
     //for (const [rowName, rowData] of Object.entries(sc)) {
     for (const rowName of colorOrder) {
         rowData = sc[rowName];
-        console.log(rowData)
+        // console.log(rowData)
         if (rowName === "penalties") continue; // skip penalties
-        console.log(rowName);
+        // console.log(rowName);
 
         const rowDiv = document.createElement("div");
         // rowDiv.className = `row ${rowName}`;
@@ -54,7 +55,8 @@ function updateScoreCard(sc) {
         // add lock cell at the end
         const lockCell = document.createElement("div");
         lockCell.classList.add("cell", "lock");
-        lockCell.textContent = rowData.locked ? "🔒" : "🤙";
+        // lockCell.textContent = rowData.locked ? "🔒" : "🤙";
+        lockCell.textContent = rowData.locked ? "💀" : "😀";
 
         rowDiv.appendChild(lockCell);
 
@@ -63,12 +65,20 @@ function updateScoreCard(sc) {
 
     // Penalties
     document.getElementById("penalties").textContent = sc.penalties;
+    document.getElementById("score").textContent = sc.score;
+
+    if (sc.gameIsDone === true) {
+        const overlay = document.createElement("div");
+        overlay.className = "overlay";
+        overlay.textContent = "Je score is " + sc.score + "!";
+        scorecardDiv.appendChild(overlay);
+    }
 }
 
 async function rollDice() {
     const res = await fetch(API + "/roll");
     const dice = await res.json();
-    console.log(dice);
+    // console.log(dice);
     if (dice["white1"] > 0) {
         renderDice(dice);
         const res = await fetch(`${API}/getOptions?white=true`, { method: "POST" });
@@ -78,7 +88,7 @@ async function rollDice() {
 }
 
 async function handleOptionClick(color, value, white) {
-    console.log(color, value, white)
+    // console.log(color, value, white)
     const res = await fetch(`${API}/setOption?color=${color}&number=${value}&white=${white}`, { method: "POST" });
     const scorecard = await res.json();
     updateScoreCard(scorecard);

@@ -22,14 +22,18 @@ public class DiceRoll {
         }
     }
 
-    // public int[] getDiceRoll()
-    // {
-    //     return this.currentRoll;
-    // }
-
     public void deactivate(String color)
     {
         this.activeDice[Translator.nameToIndex(color)] = false;
+    }
+
+    public void deactivateAlLotAtOnce(boolean[] locks)
+    {
+        for(int i=0;i<locks.length;i++)
+        {
+            this.activeDice[i] = !locks[i];
+        }
+        // this.activeDice[Translator.nameToIndex(color)] = false;
     }
     
     public boolean[] currentActiveDice()

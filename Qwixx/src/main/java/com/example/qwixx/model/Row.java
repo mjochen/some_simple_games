@@ -1,17 +1,29 @@
 package com.example.qwixx.model;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Row {
     private int[] numbers = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    private int[] points = { 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78 };
     private boolean[] ticked = { false, false, false, false, false, false, false, false, false, false, false };
     private boolean locked;
     private Random rnd = new Random();
 
     // constructor
-    public Row(boolean complex) {
+    public Row(boolean complex, boolean reverse) {
         if (complex) {
             this.shuffleArray(this.numbers);
+        }
+        if (reverse) {
+            int[] temp = new int[this.numbers.length];
+            int j =this.numbers.length;
+            for (int i = 0; i < this.numbers.length; i++) {
+                temp[j - 1] = this.numbers[i];
+                j = j - 1;
+            }
+            this.numbers = temp;
         }
         this.locked = false;
     }
@@ -56,7 +68,13 @@ public class Row {
     }
 
     public int calculateScore() {
-        return 10;
+        int total = 0;
+        for (boolean tick : this.ticked)
+            if (tick)
+                total++;
+        if (this.locked)
+            total++;
+        return this.points[total];
     }
 
     public int[] getNumbers() {

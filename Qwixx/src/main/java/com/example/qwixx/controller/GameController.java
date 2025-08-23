@@ -33,34 +33,54 @@ public class GameController {
     @GetMapping("/roll")
     public DiceRoll rollDice(HttpSession session) {
         ScoreCard sc = (ScoreCard) session.getAttribute("scorecard");
-        if(sc==null) return zero;
-        if(!this.canRoll) return zero;
+        if (sc == null)
+            return zero;
+        if (!this.canRoll)
+            return zero;
+        if (sc.getGameIsDone())
+            return zero;
 
         this.canRoll = false;
-        dice.roll();
+        // dice.roll();
+
+        // always at least one option
+        for (int i = 0; i <= 100; i++) {
+            dice.roll();
+            Options opt_w = new Options(true, dice, sc);
+            Options opt_c = new Options(false, dice, sc);
+            int l = opt_w.getOptions().length + opt_c.getOptions().length;
+            if (l > 0)
+                return dice;
+        }
+
         return dice;
     }
 
     @PostMapping("/getOptions")
-    public Options getOptions(@RequestParam boolean white, HttpSession session){
+    public Options getOptions(@RequestParam boolean white, HttpSession session) {
         ScoreCard sc = (ScoreCard) session.getAttribute("scorecard");
         Options opt = new Options(white, dice, sc);
         return opt;
     }
 
     @PostMapping("/setOption")
-    public ScoreCard setOption(@RequestParam String color, @RequestParam int number, @RequestParam boolean white, HttpSession session){
+    public ScoreCard setOption(@RequestParam String color, @RequestParam int number, @RequestParam boolean white,
+            HttpSession session) {
         ScoreCard sc = (ScoreCard) session.getAttribute("scorecard");
 
-        if(!sc.crossField(color, number)) this.numberOptionsSkipped ++;
+        if (!sc.crossField(color, number))
+            this.numberOptionsSkipped++;
 
-        if(this.numberOptionsSkipped == 2) sc.addPenalty();
+        if (this.numberOptionsSkipped == 2)
+            sc.addPenalty();
 
-        if(!white)
-        {
+        if (!white) {
             this.canRoll = true;
             this.numberOptionsSkipped = 0;
         }
+
+        this.dice.deactivateAlLotAtOnce(sc.returnAllLockedRows());
+
         return sc;
     }
 

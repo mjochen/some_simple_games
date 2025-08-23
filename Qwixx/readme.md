@@ -1,3 +1,5 @@
 v 'ticked' erbij inkrijgen -> rows
 v dobbelstenen
-* new game (button, post, blabla)
+v new game (button, post, blabla)
+* score (sc, row)
+* game over

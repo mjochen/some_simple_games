@@ -9,19 +9,20 @@
 
 <body>
     <h1>Qwixx</h1>
-    <button onclick="newGame()">New Game</button>
+    <button onclick="newGame()">Nieuw Spelletje</button>
     <input type="checkbox" id="complexGame">Getallen niet in volgorde</input>
     <br/>
-    <h2>Scorecard</h2>
+    <!-- <h2>Scorecard</h2> -->
     <div id="scorecard"></div>
-    <p>Penalties: <span id="penalties"></span></p>
-    <h2>Opties</h2>
+
+    <p>Strafschoppen: <span id="penalties"></span>
+    Goals: <span id="score"></span></p>
+    <!-- <h2>Opties</h2> -->
     <div class="dice" id="optionsContainer"></div>
-    <h2>Dobbelstenen</h2>
-    <button onclick="rollDice()">Roll Dice</button>
-    
+    <!-- <h2>Dobbelstenen</h2> -->
     <!-- <button onclick="fetchScoreCard()">Fetch scorecard</button> -->
-    <div class="dice" id="diceContainer"></div>
+    <p><button onclick="rollDice()">Rol die dobbelaars!</button>
+    <span class="dice" id="diceContainer"></span></p>
     
 
     <script type="text/javascript" src="/index.js"></script>
