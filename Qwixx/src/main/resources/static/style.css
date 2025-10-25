@@ -3,6 +3,12 @@ body {
     padding: 1rem;
 }
 
+.page {
+  max-width: 550px;   /* same width constraint for header + status */
+  margin: 0 auto;     /* center on screen */
+}
+
+
 h1 {
     margin-bottom: 0.5rem;
 }

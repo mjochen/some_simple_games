@@ -33,6 +33,7 @@ public class Row {
             for (int i = this.numbers.length - 1; i >= 0; i--) {
                 if (this.numbers[i] == number) {
                     this.ticked[i] = true;
+                    if(i==10)this.locked = true;
                     return true;
                 }
             }
@@ -49,7 +50,7 @@ public class Row {
             }
             if (tickCount > 5) {
                 // this.ticked[10] = true;
-                this.locked = true;
+                
                 return true;
             } else {
                 return false;
