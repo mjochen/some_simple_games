@@ -1,3 +1,6 @@
+-> Got it's own repo. [link](https://github.com/mjochen/qwixx)
+
+
 v 'ticked' erbij inkrijgen -> rows
 v dobbelstenen
 v new game (button, post, blabla)
